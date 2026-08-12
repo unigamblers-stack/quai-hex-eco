@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quai Hex Ecosystem Map — QHEX & the Quai DeFi Stack</title>
+  <meta name="description" content="Layer-by-layer map of DeFi protocols being built on Quai: QHEX/HexAA, Liquid Loans (USDL), Phiat/Phame/Phux ports, Tewkenaire, and more.">
+  <meta property="og:title" content="Quai Hex Ecosystem Map">
+  <meta property="og:description" content="Layers, verdicts, effort, roadmap — the full Quai DeFi port stack, anchored on QHEX.">
+  <meta name="theme-color" content="#0d1117">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-head">
+    <div class="wrap">
+      <a class="brand" href="#top"><span class="brand-mark">QH</span> Quai Hex Ecosystem</a>
+      <nav class="nav">
+        <a href="#layers">Layer map</a>
+        <a href="#matrix">Matrix</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#ops">Ops &amp; funding</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap">
+        <p class="kicker" id="kicker"></p>
+        <h1>Quai <span class="accent">Hex</span> Ecosystem Map</h1>
+        <p class="lede" id="lede"></p>
+        <div class="stats" id="stats"></div>
+        <p class="updated" id="updated"></p>
+      </div>
+    </section>
+
+    <section id="layers" class="sec">
+      <div class="wrap">
+        <h2>Layer map</h2>
+        <p class="sub">The stack bottom-up. Chips are colored by verdict; hover for the short story.</p>
+        <div id="layerList"></div>
+      </div>
+    </section>
+
+    <section id="matrix" class="sec alt">
+      <div class="wrap">
+        <h2>Protocol matrix</h2>
+        <p class="sub">Filterable by layer, verdict, origin and effort — or plain search.</p>
+        <div class="filters" id="filters"></div>
+        <div class="table-scroll">
+          <table class="matrix" id="matrixTable">
+            <thead>
+              <tr>
+                <th>Protocol</th>
+                <th>Origin</th>
+                <th>Layer</th>
+                <th>Quai home</th>
+                <th>Verdict</th>
+                <th>Effort</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody id="matrixBody"></tbody>
+          </table>
+        </div>
+        <p class="count" id="matrixCount"></p>
+      </div>
+    </section>
+
+    <section id="roadmap" class="sec">
+      <div class="wrap">
+        <h2>Roadmap</h2>
+        <p class="sub">Sequenced by dependency: no-oracle work first, oracle-dependent work after Phiat's Phase‑0 adapter.</p>
+        <div id="timeline"></div>
+      </div>
+    </section>
+
+    <section id="ops" class="sec alt">
+      <div class="wrap">
+        <h2>Ops, roles, funding &amp; marketing</h2>
+        <div class="grid2">
+          <div>
+            <h3>Roles &amp; gaps</h3>
+            <table class="plain" id="rolesTable"><thead><tr><th>Role</th><th>Who</th><th>Focus</th><th>Gap</th></tr></thead><tbody></tbody></table>
+          </div>
+          <div>
+            <h3>Tooling</h3>
+            <table class="plain" id="toolsTable"><thead><tr><th>Tool</th><th>Use</th><th>Status</th><th>Note</th></tr></thead><tbody></tbody></table>
+          </div>
+          <div>
+            <h3>Funding</h3>
+            <table class="plain" id="fundingTable"><thead><tr><th>Item</th><th>Detail</th><th>Status</th></tr></thead><tbody></tbody></table>
+          </div>
+          <div>
+            <h3>Marketing</h3>
+            <table class="plain" id="marketingTable"><thead><tr><th>Channel</th><th>Detail</th><th>Status</th></tr></thead><tbody></tbody></table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>Quai Hex Ecosystem Map · updated <span id="footDate"></span> · not financial advice.</p>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
