@@ -35,10 +35,15 @@ python3 -m http.server 8080
 npx serve -s .
 ```
 
-## Deploy (Railway)
+## Deploy
 
-Static site — `railway.json` serves the repo root via `npx serve` on port 3000.
-Connect the repo at https://railway.app and deploy; no environment variables.
+**Live:** https://unigamblers-stack.github.io/quai-hex-eco/ (GitHub Pages, free plan — public repo).
+
+Pushing to `main` auto-deploys. `railway.json` is kept in-repo for a future
+Railway move if the free-plan resource cap ever frees up (the quaiswap-ui stack
+currently consumes the free allocation).
+
+No environment variables.
 
 ## Data sources
 
