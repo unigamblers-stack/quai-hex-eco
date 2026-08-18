@@ -23,7 +23,7 @@ roadmap timeline, and ops/roles/funding/marketing tables.
 | LIVE | Running on-chain or in production |
 | IN_WORK | Actively being built |
 | BUILD_FIRST | Highest-priority next ports (no oracle dependency) |
-| DEFERRED | Blocked (oracle/keeper dependent) |
+| DEFERRED | Scheduled later (oracle/keeper work — sequencing, not a hard block) |
 | INTEGRATION | External partner rail, not a fork |
 | REFERENCE | Design inspiration only |
 
@@ -50,6 +50,7 @@ No environment variables.
 Grounded in the project vault (`~/Desktop/dev-projects/Projects/` — Liquid
 Loans Fork, Phame-Phiat-Phux Port, Tewkenaire Contracts, Hex + HexAA Lobby
 Contracts, QuaiScreener, Arb Executor v2-v3, LMR-LMT Lockup Curve) plus live
-research on the PulseChain originals (INC, EGG, USDY).
+research on the PulseChain originals (INC, EGG, USDY) and on Quasdaq's live
+Stork Oracle deployment (BTC/ETH/SOL/BNB/SPY feeds on Cyprus-1).
 
 Not financial advice.

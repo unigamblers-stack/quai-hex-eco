@@ -2,7 +2,7 @@ window.ECO = {
   meta: {
     title: "Quai Hex Ecosystem Map",
     tagline: "A layer-by-layer map of the DeFi stack being ported and built natively on Quai — anchored on QHEX and the PulseChain diaspora.",
-    updated: "2026-08-10",
+    updated: "2026-08-18",
     verdicts: {
       LIVE:        { label: "Live",         color: "#3ddc84" },
       IN_WORK:     { label: "In work",      color: "#ffd60a" },
@@ -44,28 +44,46 @@ window.ECO = {
         note: "Dispatch by input length, no selectors, rejects readOnly — every staking vault must be a per-miner delegate ledger. Real curve is LINEAR interpolation per lockup byte (LMR spec)." }
     },
     {
+      id: "wquai", name: "WQUAI (Wrapped Native)", origin: "native", layer: "L0",
+      what: "Composable ERC-20 wrapper of QUAI — the denominator of DEX pairs and DeFi collateral.",
+      quai: { repo: "canonical wrapper (live)", status: "Mainnet anchor pair USDT/WQUAI; MockWQUAI used on Orchard tests", verdict: "LIVE", effort: null,
+        note: "Catalogued, not planned: it exists. Ensure the canonical mainnet wrapper is the audited one — Orchard suites use a mock." }
+    },
+    {
       id: "phux", name: "PHUX (Port of Balancer v2)", origin: "ethereum", layer: "L1",
       what: "Weighted/stable pools + veToken governance. The one big vault primitive Quai lacks.",
       quai: { repo: "~/quai-balancer", status: "Contracts authored, phase 1 of port order", verdict: "BUILD_FIRST", effort: "M",
         note: "No oracle needed — start immediately. Vault+WeightedPoolFactory+WeightedMath compiled." }
     },
     {
+      id: "router", name: "DEX Aggregator / Router", origin: "native", layer: "L1",
+      what: "Cross-DEX order routing over QuaiSwap + Quainance (+ PHUX later) — '1inch for Quai': split orders, best price.",
+      quai: { repo: "none yet", status: "Unbuilt — greenfield", verdict: "BUILD_FIRST", effort: "S",
+        note: "Small, high-surface build. Two DEXs exist with no router between them; arb executor proves the price gaps are real. Clone of a standard router aggregator suffices." }
+    },
+    {
       id: "phiat", name: "Phiat (Port of Aave v2)", origin: "ethereum", layer: "L2",
       what: "Supply/borrow lending market — Quai has none today.",
-      quai: { repo: "~/quai-lending", status: "Scaffold; shared IPriceOracle ADR-001", verdict: "DEFERRED", effort: "L",
-        note: "Blocked on Phase 0 oracle adapter — same IPriceOracle decision as Liquid Loans." }
+      quai: { repo: "~/quai-lending", status: "Scaffold; ADR-001 approved + Stork tier (ADR-002)", verdict: "DEFERRED", effort: "L",
+        note: "Oracle path DECIDED: TWAP tier for LTV/liquidation + Stork signed feeds (live Cyprus-1: BTC/ETH/SOL/BNB/SPY) as keeper tier. Sequencing only: PHUX → Phiat." }
     },
     {
       id: "loan", name: "Liquid Loans (USDL)", origin: "pulsechain", layer: "L2",
       what: "Liquity-style CDP: 110% collateral, 0% interest, stability pool.",
       quai: { repo: "~/quai-liquid-loans", status: "Deployed+verified on Orchard (chainId 15000), live vault open", verdict: "IN_WORK", effort: "S",
-        note: "10/10 contracts live; vault open (1200 WQUAI→1000 USDL). Rule: multi-contract txs need EIP-2930 access lists. Next: keeper oracle updates + UI." }
+        note: "10/10 contracts live; vault open (1200 WQUAI→1000 USDL). Rule: multi-contract txs need EIP-2930 access lists. Next: keeper oracle updates (Stork or TWAP, per ADR-002) + UI." }
     },
     {
       id: "phame", name: "PHAME (Port of GMX v1)", origin: "ethereum", layer: "L3",
       what: "Perp DEX with AMM-style pricing — the last missing DeFi leg.",
       quai: { repo: "~/quai-perps", status: "Scaffold", verdict: "DEFERRED", effort: "XL",
-        note: "Needs keepers + signed price feeds + oracle. Last build, highest complexity." }
+        note: "Keepers + signed feeds — Stork covers the signed tier (BTC/ETH/SOL/BNB/SPY), TWAP fallback per ADR-001/002. Last build, highest complexity." }
+    },
+    {
+      id: "wqi", name: "WQI (Wrapped QI)", origin: "native", layer: "L4",
+      what: "ERC-20 wrapper of QI — makes the chain's UTXO-ledger risk-off asset composable in DeFi.",
+      quai: { repo: "exists (canonical wrapper)", status: "Live — confirmed", verdict: "LIVE", effort: null,
+        note: "Keys DeFi to QI: WQI is the collateral/margin primitive for Phiat markets and perp margin that would otherwise be walled off on the UTXO ledger." }
     },
     {
       id: "qi", name: "QI (Energy Dollar)", origin: "native", layer: "L4",
@@ -110,6 +128,18 @@ window.ECO = {
         note: "Port the DESIGN (emission to stakers of a scarce token) onto QHEX stakers instead of validators. Contrast: EGG burns vs INC emissions." }
     },
     {
+      id: "quasdaq", name: "Quasdaq + Stork Oracle", origin: "native", layer: "L6",
+      what: "Live parimutuel prediction markets on Quai — and the first working signed-feed oracle (Stork) on the chain.",
+      quai: { repo: "quasdaq.com (external, live)", status: "Live on Cyprus-1 mainnet — MarketFactory 0x0069755b…", verdict: "LIVE", effort: null,
+        note: "Stork feeds BTC/ETH/SOL/BNB/SPY resolve markets; feedIdHash = keccak256(utf8 id); resolution pays the oracle update fee (getUpdateFeeV1) — that signed-feed pipeline is our ADR-001 keeper tier (ADR-002). Fee model reference: 3% of losing pool (2% treasury + 1% creator), no entry fees." }
+    },
+    {
+      id: "oracle", name: "Oracle Stack (IPriceOracle)", origin: "native", layer: "L6",
+      what: "Phase-0 price-feed interface — the keystone every oracle-dependent port (Phiat, PHAME, Liquid Loans liquidations) sits on.",
+      quai: { repo: "ADR-001-ORACLE (~/quai-lending)", status: "Design only — unbuilt", verdict: "IN_WORK", effort: "L",
+        note: "No Chainlink/Pyth on Quai — homegrown feeds are the load-bearing gap of the whole map. Reuses the same interface across lending + perps + liquidations; QI/QUAI-denominated markets can price natively via conversion rate (no USD oracle needed for those)." }
+    },
+    {
       id: "screener", name: "QuaiScreener", origin: "native", layer: "L6",
       what: "DexScreener-class indexer — no external screener covers Quai.",
       quai: { repo: "~/quaiswap-ui (indexer/)", status: "Live on Railway; API public", verdict: "LIVE", effort: null,
@@ -125,13 +155,14 @@ window.ECO = {
 
   roadmap: [
     { phase: "0", date: "2026-08", name: "Foundations already laying", items: [
-      "Liquid Loans keeper oracle + UI on the Orchard deploy",
+      "Liquid Loans keeper oracle (Stork or TWAP) + UI on the Orchard deploy",
+      "Stork adoption: ADR-002 — signed-feed tier sourced from live Cyprus-1 feeds",
       "QHEX/HexAA lobby contracts written against verified LMR curve",
       "Tewkenaire deploy to Orchard (wallet decision)",
       "PHUX Phase 1: WeightedPools on Orchard"
     ] },
     { phase: "1", date: "2026-09", name: "Port push", items: [
-      "Phiat lending v1 (simple IPriceOracle, USDL/QUAI feed)",
+      "Phiat lending v1 (IPriceOracle: TWAP + Stork signed tier, USDL/QUAI feed)",
       "EGG-style aggregator fork with burn hook",
       "QuaiScreener multi-zone + pairs growth",
       "QHEX launch: lobby opens, stakes accrue"
@@ -152,7 +183,7 @@ window.ECO = {
 
   roles: [
     { role: "Solidity / protocol", who: "1–2", focus: "Ports: PHUX→Phiat→PHAME; QHEX lobby; Tewkenaire deploy", gap: "Full-time contract review capacity" },
-    { role: "Keepers & oracles", who: "1", focus: "Liquid Loans price feed loop; Phiat oracle adapter; PHAME signed feeds", gap: "No Chainlink/Pyth on Quai — homegrown feeds are THE bottleneck" },
+    { role: "Keepers & oracles", who: "1", focus: "Liquid Loans price feed loop; Stork adapter (ADR-002); PHAME signed feeds", gap: "Stork live on Cyprus-1 covers signed feeds (BTC/ETH/SOL/BNB/SPY); TWAP is free — gap shrinks to keeper liveness + per-zone Stork deploy" },
     { role: "Indexer & backend", who: "1", focus: "QuaiScreener tail/API, multi-zone, history", gap: "None critical" },
     { role: "UI/UX", who: "1", focus: "quaiswap-ui shell; this map; screener polish", gap: "Design tokens are getting tired — light refresh" },
     { role: "Infra/ops", who: "1", focus: "Railway deploys, bot supervision, key hygiene, EIP-2930 tooling", gap: "Access-list generation is still manual" },
@@ -164,6 +195,7 @@ window.ECO = {
     { tool: "Raw deploy shim + salt grind", use: "Orchard deploys", status: "live", note: "CREATE scope b0==0x00 && b1≤0x7F verified empirically; ALWAYS bake EIP-2930 access lists" },
     { tool: "EIP-2930 access lists", use: "Multi-contract txs", status: "required", note: "Without them multi-CALL txs revert silently burning full gas limit" },
     { tool: "Railway + Postgres", use: "quaiswap-ui app, screener API, indexer DB", status: "live", note: "~$4/mo Postgres inside Hobby credit" },
+    { tool: "Stork Oracle", use: "Signed price feeds — Phiat/PHAME/Liquid Loans keeper tier", status: "live", note: "BTC/ETH/SOL/BNB/SPY on Cyprus-1 via Quasdaq relay; feedId = keccak256(utf8); update fee via getUpdateFeeV1" },
     { tool: "GitHub Actions", use: "Arb monitor (hourly notify)", status: "live", note: "Cross-checks the bot independently" },
     { tool: "Obsidian vault + cloudctx", use: "Project memory / handoff", status: "live", note: "Single source of truth for lessons learned" },
     { tool: "TradingView", use: "Market surveillance for entry/exit timing", status: "routine" }
