@@ -135,9 +135,9 @@ window.ECO = {
     },
     {
       id: "oracle", name: "Oracle Stack (IPriceOracle)", origin: "native", layer: "L6",
-      what: "Phase-0 price-feed interface — the keystone every oracle-dependent port (Phiat, PHAME, Liquid Loans liquidations) sits on.",
-      quai: { repo: "ADR-001-ORACLE (~/quai-lending)", status: "Design only — unbuilt", verdict: "IN_WORK", effort: "L",
-        note: "No Chainlink/Pyth on Quai — homegrown feeds are the load-bearing gap of the whole map. Reuses the same interface across lending + perps + liquidations; QI/QUAI-denominated markets can price natively via conversion rate (no USD oracle needed for those)." }
+      what: "Feed-adapter layer — turns signed feeds + native conversion rates into the IPriceOracle interface that lending, perps and liquidations consume.",
+      quai: { repo: "ADR-001-ORACLE (~/quai-lending) + ADR-002 (Stork keeper tier)", status: "Design; reference impl LIVE (Stork via Quasdaq)", verdict: "IN_WORK", effort: "L",
+        note: "No Chainlink/Pyth on Quai, BUT Stork already runs signed BTC/ETH/SOL/BNB/SPY feeds on Cyprus-1 (feedIdHash = keccak256(utf8 id), resolution pays getUpdateFeeV1) — the ADR-001 keeper tier (ADR-002). Remaining gap: the adapter wiring signed feeds into one IPriceOracle interface + feeds Stork doesn't cover (QUAI/USD for USDL liquidations, QHEX pricing). QI/QUAI-denominated markets price natively via on-chain conversion rate — no USD feed needed for those." }
     },
     {
       id: "screener", name: "QuaiScreener", origin: "native", layer: "L6",
